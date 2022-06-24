@@ -1,0 +1,8 @@
+autopep8
+Django
+django-rest-framework
+djangorestframework
+drf-yasg
+
+psycopg2-binary
+djangorestframework_simplejwt
