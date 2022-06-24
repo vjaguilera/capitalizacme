@@ -1,6 +1,8 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 
 # Create your models here.
+User = get_user_model()
 
 
 class Coyote(models.Model):
@@ -64,10 +66,10 @@ class PublicMenu(models.Model):
 class ScheduleMenu(models.Model):
     pub_date = models.DateField()
     plate = models.ForeignKey(Plate, on_delete=models.CASCADE)
-    coyote = models.ForeignKey(Coyote, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
-        return f"{self.pub_date} - {self.coyote.name} - {self.plate.name}"
+        return f"{self.pub_date} - {self.user.username} - {self.plate.name}"
 
     class Meta:
         ordering = ['pub_date']
