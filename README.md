@@ -11,6 +11,7 @@ If you are in a rush, just run:
 - `make build` To build the project based on a Dockerfile
 - `make up` To run the proyect in a not-detached mode
 
+Then go to `http://0.0.0.0:8000`
 ## RUN IT WITHOUT DOCKER
 First, create virtual enviroment named venv
 
@@ -29,3 +30,6 @@ Run the project
 `capitalizacme$ python manage.py runserver`
 
 Then go to `http://127.0.0.1:8000`
+
+## Check the Docs
+Go to `/api/swagger/schema/` to check the documentation. You can try every endpoint (its OpenAPI), but if you have Postman, use it! Check our `json` documentation in the `doc/` directory.
