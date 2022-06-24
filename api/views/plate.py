@@ -45,6 +45,32 @@ class PlateApiView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class PlateDetailApiView(APIView):
+
+    def get_object(self, plate_id):
+        '''
+        Helper method to get the object with given todo_id, and user_id
+        '''
+        try:
+            return Plate.objects.get(id=plate_id)
+        except Plate.DoesNotExist:
+            return None
+
+    # 3. Retrieve
+    def get(self, request, plate_id, *args, **kwargs):
+        '''
+        Retrieves the Plate with given Plate_id
+        '''
+        plate_instance = self.get_object(plate_id)
+        if not plate_instance:
+            return Response(
+                {"res": "Object with Plate id does not exists"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = PlateSerializer(plate_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 # class PlateDetailApiView(APIView):
 #     # add permission to check if user is authenticated
 #     # permission_classes = [permissions.IsAuthenticated]
