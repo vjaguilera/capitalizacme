@@ -1,0 +1,237 @@
+{
+	"info": {
+		"_postman_id": "7db6d33f-66a1-491a-a46b-84b4496e3a8f",
+		"name": "Capitalizacme",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}api/user/details",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"user",
+								"details"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Menu",
+			"item": [
+				{
+					"name": "Public Menu",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}api/menus/public?start_date=2022-06-24&end_date=2022-06-24",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"menus",
+								"public"
+							],
+							"query": [
+								{
+									"key": "start_date",
+									"value": "2022-06-24"
+								},
+								{
+									"key": "end_date",
+									"value": "2022-06-24"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Menu Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/menus/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"menus",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Schedule Menu",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/menus/schedule",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"menus",
+								"schedule"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Request Schedule Menu",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"plate_id\": 1,\n    \"public_menu_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/menus/schedule",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"menus",
+								"schedule"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Schedule Menu Plate",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"new_ingredients_id\": [1, 2, 3]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/menus/schedule/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"menus",
+								"schedule",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Plate",
+			"item": [
+				{
+					"name": "Plate Detail",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/plates/6",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"plates",
+								"6"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
