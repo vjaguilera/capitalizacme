@@ -14,7 +14,7 @@ up:
 
 resetdb:
 	$(info Make: Resetting database (dropping and creating db))
-	@$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) run --rm ${MAIN_SERVICE_TARGET} python manage.py reset_db
+	@$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) run --rm ${MAIN_SERVICE_TARGET} python manage.py flush
 
 makemigrations:
 	$(info Make: Make migrations)
@@ -27,6 +27,10 @@ migrate:
 test:
 	$(info Make: Running tests)
 	@$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) run --rm $(MAIN_SERVICE_TARGET) python manage.py test
+
+seed:
+	$(info Make: Running tests)
+	@$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) exec $(MAIN_SERVICE_TARGET) python seed.py
 
 register:
 	$(info Make: Creating superuser)
@@ -47,7 +51,7 @@ down:
 
 destroy:
 	$(info Make: Cleaning container(s) and volume(s))
-	@$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) down --volumes
+	@$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) down --remove-orphans
 
 build:
 	$(info Make: Building service(s))

@@ -5,16 +5,6 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class Coyote(models.Model):
-    # Name of the Coyote
-    name = models.CharField(max_length=255, null=False)
-    # Email of the Coyote
-    email = models.EmailField(null=False)
-
-    def __str__(self):
-        return "{} - {}".format(self.name, self.email)
-
-
 class Ingredient(models.Model):
     # Name of the menu
     name = models.CharField(max_length=255, null=False)
