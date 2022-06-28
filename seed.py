@@ -1,23 +1,8 @@
-from django.contrib.auth.models import User
 import random
 from randomuser import RandomUser
 import os
 import django
 import sys
-
-currentdir = os.path.dirname(os.path.realpath(__file__))
-grandparentdir = os.path.dirname(os.path.dirname(currentdir))
-sys.path.append(grandparentdir)
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "acme.settings")
-django.setup()
-
-from api.models import (  # noqa: E402
-    Ingredient,
-    Plate,
-    Menu,
-    PublicMenu,
-    ScheduleMenu,
-)
 
 
 INGREDIENTS = [
@@ -36,7 +21,7 @@ INGREDIENTS = [
     "Panacota", "Flan", "Rosquillas"]
 
 
-def generate_ingredients():
+def generate_ingredients(Ingredient):
     ingredients = []
     for ingredient_data in INGREDIENTS:
         ingredient = Ingredient.objects.create(name=ingredient_data)
@@ -44,7 +29,7 @@ def generate_ingredients():
     return ingredients
 
 
-def generate_plates(n=10, k=3, ingredients=[]):
+def generate_plates(Plate, n=10, k=3, ingredients=[]):
     plates = []
     for p in range(n):
         ing = random.sample(ingredients, k)
@@ -58,7 +43,7 @@ def generate_plates(n=10, k=3, ingredients=[]):
     return plates
 
 
-def generate_menus(n=10, k=3, j=3, plates=[]):
+def generate_menus(Menu, PublicMenu, n=10, k=3, j=3, plates=[]):
     menus = []
     public_menus = []
 
@@ -70,8 +55,7 @@ def generate_menus(n=10, k=3, j=3, plates=[]):
         for mn in range(j):
             plts = random.sample(plates, k)
             menu_date = today + timedelta(days=days)
-            menu_date_str = datetime.strptime(
-                menu_date, '%Y-%m-%d')
+            menu_date_str = menu_date.strftime('%Y-%m-%d')
             menu_name = "Menu {} del {}".format(
                 mn,
                 menu_date_str
@@ -82,22 +66,23 @@ def generate_menus(n=10, k=3, j=3, plates=[]):
                 code=menu_code)
             menu.plates.set(plts)
             menu.save()
-            menu.append(menu)
+            menus.append(menu)
 
             public_menu = PublicMenu.objects.create(
                 capacity=100,
                 pub_date=menu_date_str,
-                menu=menu.id
+                menu=menu
             )
             public_menus.append(public_menu)
     return menus, public_menus
 
 
-def generate_user(n=5):
+def generate_user(User, n=5):
     users = []
     for u in range(n):
         user = RandomUser({'nat': 'es'})
         first_name = user.get_first_name()
+        first_name += str(u)
         email = user.get_email()
 
         password = '12345678'
@@ -109,34 +94,50 @@ def generate_user(n=5):
     return users
 
 
-def generate_schedule_menu(public_menus, users):
+def generate_schedule_menu(ScheduleMenu, public_menus, users):
     scheduled_menus = []
     for public_menu in public_menus:
         # Select Plate of a menu
         menu = public_menu.menu
-        plate = random.choices(population=menu.plates)[0]
-        user = random.choices(population=users)[0]
+        plates = menu.plates.all()
+        plate = plates[0]
+        user = users[0]
 
         schedule_menu = ScheduleMenu.objects.create(
             pub_date=public_menu.pub_date,
-            plate=plate.id,
-            user=user.id
+            plate=plate,
+            user=user
         )
 
         scheduled_menus.append(schedule_menu)
 
 
 def main():
-    users = generate_user()
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "acme.settings")
+    django.setup()
+
+    from django.contrib.auth.models import User
+
+    from api.models import (  # noqa: E402
+        Ingredient,
+        Plate,
+        Menu,
+        PublicMenu,
+        ScheduleMenu,
+    )
+
+    users = generate_user(User=User)
     print("USUARIOS", users)
-    ingredients = generate_ingredients()
+    ingredients = generate_ingredients(Ingredient=Ingredient)
     print("INGREDIENTES", ingredients)
-    plates = generate_plates(ingredients=ingredients)
+    plates = generate_plates(Plate=Plate, ingredients=ingredients)
     print("PLATES", plates)
-    menus, public_menus = generate_menus(plates=plates)
+    menus, public_menus = generate_menus(
+        Menu=Menu, PublicMenu=PublicMenu, plates=plates)
     print("MENUS", menus)
     print("PUBLIC MENUS", public_menus)
-    scheduled_menus = generate_schedule_menu(public_menus, users)
+    scheduled_menus = generate_schedule_menu(
+        ScheduleMenu=ScheduleMenu, public_menus=public_menus, users=users)
     print("SCHEDULED MENUS", scheduled_menus)
 
 
